@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SuratMasukController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('dashboard');
+})->name('dashboard');
 
 //route gate 
 // Route::get('/surat-masuk', function () {
@@ -22,3 +22,7 @@ Route::get('/surat-masuk/', [SuratMasukController::class, 'index'])
 
 Route::get('/surat-masuk/{id}', [SuratMasukController::class, 'show'])
     ->name('surat-masuk.show');
+
+// Tambahkan baris ini di bawah route surat masuk
+Route::get('/surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat-keluar.index');
+Route::get('/surat-keluar/{id}', [App\Http\Controllers\SuratKeluarController::class, 'show'])->name('surat-keluar.show');
