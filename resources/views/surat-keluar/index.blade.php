@@ -1,28 +1,31 @@
 @extends('layouts.app')
-
+@section('title', 'Daftar Surat Keluar')
 @section('content')
-<h1>halaman surat keluar</h1>
-
-<table border="1" cellpadding="10">
+<h1>Daftar Surat Keluar</h1>
+<table border="1" cellpadding="8">
     <thead>
         <tr>
-            <th>no</th>
-            <th>nomor_surat</th>
-            <th>tanggal</th>
-            <th>pengirim</th>
-            <th>perihal</th>
-            <th>AKsi</th>
+            <th>No</th>
+            <th>Nomor Surat</th>
+            <th>Tanggal</th>
+            <th>Tujuan</th>
+            <th>Perihal</th>
+            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>1</td>
-            <td>001/FT/X/2026</td>
-            <td>13-10-2026</td>
-            <td>Fakultas Teknik</td>
-            <td>Rapat</td>
-            <td><a href="{{ route('surat-keluar.show', 1) }}">Detail</a></td>
-        </tr>
+        @forelse ($suratKeluar as $surat)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $surat->nomor_surat }}</td>
+                <td>{{ $surat->tanggal }}</td>
+                <td>{{ $surat->tujuan }}</td>
+                <td>{{ $surat->perihal }}</td>
+                <td><a href="{{ route('surat-keluar.show', $surat->id) }}">Detail</a></td>
+            </tr>
+        @empty
+            <tr><td colspan="6">Belum ada surat keluar.</td></tr>
+        @endforelse
     </tbody>
 </table>
 @endsection

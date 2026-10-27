@@ -2,27 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\OutgoingLetter;
 
 class SuratKeluarController extends Controller
 {
     public function index()
     {
-        return view('surat-keluar.index');
+        $suratKeluar = OutgoingLetter::all();
+        return view('surat-keluar.index', compact('suratKeluar'));
     }
 
     public function show($id)
     {
-        // Membuat data dummy sementara agar view tidak error
-        $suratShow = (object) [
-            'id' => $id,
-            'nomor_surat' => '0046/XXXXI/09737',
-            'tanggal' => '06-11-2026',
-            'pengirim' => 'Saya Sendiri',
-            'perihal' => 'Makan Malam'
-        ];
-
-        // Memuat view sambil membawa data $suratShow
-        return view('surat-keluar.show', compact('suratShow'));
+        $surat = OutgoingLetter::findOrFail($id);
+        return view('surat-keluar.show', compact('surat'));
     }
 }
