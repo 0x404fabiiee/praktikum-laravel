@@ -7,7 +7,9 @@
     <p style="color:green">{{ session('success') }}</p>
 @endif
 
-<p><a href="{{ route('surat-masuk.create') }}">+ Tambah Surat</a></p>
+@can('manage-letters')
+    <p><a href="{{ route('surat-masuk.create') }}">+ Tambah Surat</a></p>
+@endcan
 
 <table border="1" cellpadding="8">
     <thead>
@@ -30,12 +32,15 @@
                 <td>{{ $surat->perihal }}</td>
                 <td>
                     <a href="{{ route('surat-masuk.show', $surat->id) }}">Detail</a>
-                    <a href="{{ route('surat-masuk.edit', $surat->id) }}">Edit</a>
-                    <form method="POST" action="{{ route('surat-masuk.destroy', $surat->id) }}" style="display:inline" onsubmit="return confirm('Yakin hapus surat ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Hapus</button>
-                    </form>
+
+                    @can('manage-letters')
+                        <a href="{{ route('surat-masuk.edit', $surat->id) }}">Edit</a>
+                        <form method="POST" action="{{ route('surat-masuk.destroy', $surat->id) }}" style="display:inline" onsubmit="return confirm('Yakin hapus surat ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Hapus</button>
+                        </form>
+                    @endcan
                 </td>
             </tr>
         @empty

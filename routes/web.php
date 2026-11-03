@@ -1,25 +1,33 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SuratMasukController;
+use App\Http\Controllers\SuratKeluarController;
 
-Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])
+        ->name('login');
+    Route::post('/login', [LoginController::class, 'login'])
+        ->name('login.submit');
+});
 
-//route gate 
-// Route::get('/surat-masuk', function () {
-//     return 'daftar isi surat masuk';
-// })->name('surat-masuk.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/', fn () => view('dashboard'))->name('dashboard');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route::get('/surat-masuk/{id}', function ($id) {
-//     return 'Detail surat masuk dengan ID:' .$id;
-// })->name('surat-masuk.index');
+    // Surat Masuk: create/store/edit/update/destroy hanya untuk petugas.
+    // Ditulis SEBELUM index/show supaya /surat-masuk/create tidak dianggap {id}.
+    Route::resource('surat-masuk', SuratMasukController::class)
+        ->except(['index', 'show'])
+        ->parameters(['surat-masuk' => 'id'])
+        ->middleware('can:manage-letters');
 
-//route controller
-Route::resource('surat-masuk', SuratMasukController::class)
-    ->parameters(['surat-masuk' => 'id']);
+    Route::resource('surat-masuk', SuratMasukController::class)
+        ->only(['index', 'show'])
+        ->parameters(['surat-masuk' => 'id']);
 
-// Tambahkan baris ini di bawah route surat masuk
-Route::get('/surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat-keluar.index');
-Route::get('/surat-keluar/{id}', [App\Http\Controllers\SuratKeluarController::class, 'show'])->name('surat-keluar.show');
+    // Surat Keluar: daftar dan detail (sesuai P3).
+    Route::resource('surat-keluar', SuratKeluarController::class)
+        ->only(['index', 'show']);
+});
