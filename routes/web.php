@@ -17,11 +17,8 @@ Route::get('/', function () {
 // })->name('surat-masuk.index');
 
 //route controller
-Route::get('/surat-masuk/', [SuratMasukController::class, 'index'])
-    ->name('surat-masuk.index');
-
-Route::get('/surat-masuk/{id}', [SuratMasukController::class, 'show'])
-    ->name('surat-masuk.show');
+Route::resource('surat-masuk', SuratMasukController::class)
+    ->parameters(['surat-masuk' => 'id']);
 
 // Tambahkan baris ini di bawah route surat masuk
 Route::get('/surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat-keluar.index');
