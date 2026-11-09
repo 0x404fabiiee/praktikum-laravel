@@ -27,7 +27,13 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'show'])
         ->parameters(['surat-masuk' => 'id']);
 
-    // Surat Keluar: daftar dan detail (sesuai P3).
+    // Surat Keluar: create/store/edit/update/destroy hanya untuk petugas.
     Route::resource('surat-keluar', SuratKeluarController::class)
-    ->parameters(['surat-keluar' => 'id']);
+        ->except(['index', 'show'])
+        ->parameters(['surat-keluar' => 'id'])
+        ->middleware('can:manage-letters');
+
+    Route::resource('surat-keluar', SuratKeluarController::class)
+        ->only(['index', 'show'])
+        ->parameters(['surat-keluar' => 'id']);
 });
