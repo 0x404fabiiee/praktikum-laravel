@@ -29,5 +29,5 @@ Route::middleware('auth')->group(function () {
 
     // Surat Keluar: daftar dan detail (sesuai P3).
     Route::resource('surat-keluar', SuratKeluarController::class)
-        ->only(['index', 'show']);
+    ->parameters(['surat-keluar' => 'id']);
 });
