@@ -9,14 +9,8 @@ class SuratMasukController extends Controller
 {
     public function index()
     {
-        $suratMasuk = IncomingLetter::all();
+        $suratMasuk = IncomingLetter::orderBy('id', 'desc')->get();
         return view('surat-masuk.index', compact('suratMasuk'));
-    }
-
-    public function show($id)
-    {
-        $surat = IncomingLetter::findOrFail($id);
-        return view('surat-masuk.show', compact('surat'));
     }
 
     public function create()
@@ -26,18 +20,24 @@ class SuratMasukController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nomor_surat' => ['required', 'string', 'max:255'],
-            'tanggal'     => ['required', 'date'],
-            'pengirim'    => ['required', 'string', 'max:255'],
-            'perihal'     => ['required', 'string', 'max:255'],
-            'keterangan'  => ['nullable', 'string'],
+        $validated = $request->validate([
+            'nomor_surat' => 'required|string|max:255',
+            'tanggal'     => 'required|date',
+            'pengirim'    => 'required|string|max:255',
+            'perihal'     => 'required|string|max:255',
+            'keterangan'  => 'nullable|string',
         ]);
 
-        IncomingLetter::create($data);
+        IncomingLetter::create($validated);
 
         return redirect()->route('surat-masuk.index')
-            ->with('success', 'Surat masuk berhasil ditambahkan.');
+            ->with('success', 'Surat berhasil ditambahkan.');
+    }
+
+    public function show($id)
+    {
+        $surat = IncomingLetter::findOrFail($id);
+        return view('surat-masuk.show', compact('surat'));
     }
 
     public function edit($id)
@@ -50,18 +50,18 @@ class SuratMasukController extends Controller
     {
         $surat = IncomingLetter::findOrFail($id);
 
-        $data = $request->validate([
-            'nomor_surat' => ['required', 'string', 'max:255'],
-            'tanggal'     => ['required', 'date'],
-            'pengirim'    => ['required', 'string', 'max:255'],
-            'perihal'     => ['required', 'string', 'max:255'],
-            'keterangan'  => ['nullable', 'string'],
+        $validated = $request->validate([
+            'nomor_surat' => 'required|string|max:255',
+            'tanggal'     => 'required|date',
+            'pengirim'    => 'required|string|max:255',
+            'perihal'     => 'required|string|max:255',
+            'keterangan'  => 'nullable|string',
         ]);
 
-        $surat->update($data);
+        $surat->update($validated);
 
         return redirect()->route('surat-masuk.index')
-            ->with('success', 'Surat masuk berhasil diperbarui.');
+            ->with('success', 'Surat berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -70,6 +70,6 @@ class SuratMasukController extends Controller
         $surat->delete();
 
         return redirect()->route('surat-masuk.index')
-            ->with('success', 'Surat masuk berhasil dihapus.');
+            ->with('success', 'Surat berhasil dihapus.');
     }
 }
