@@ -9,6 +9,16 @@
         <div class="py-3 grid grid-cols-3 gap-4"><dt class="font-medium text-slate-500">Pengirim</dt><dd class="col-span-2">{{ $surat->pengirim }}</dd></div>
         <div class="py-3 grid grid-cols-3 gap-4"><dt class="font-medium text-slate-500">Perihal</dt><dd class="col-span-2">{{ $surat->perihal }}</dd></div>
         <div class="py-3 grid grid-cols-3 gap-4"><dt class="font-medium text-slate-500">Keterangan</dt><dd class="col-span-2">{{ $surat->keterangan ?? '-' }}</dd></div>
+        <div class="py-3 grid grid-cols-3 gap-4"><dt class="font-medium text-slate-500">Kategori</dt><dd class="col-span-2">{{ $surat->category?->nama ?? 'Tanpa kategori' }}</dd></div>
+        @if ($surat->lampiran)
+            <div class="py-3 grid grid-cols-3 gap-4">
+                <dt class="font-medium text-slate-500">Lampiran</dt>
+                <dd class="col-span-2">
+                    <a href="{{ asset('storage/' . $surat->lampiran) }}" target="_blank" rel="noopener"
+                       class="text-indigo-600 hover:underline">Lihat lampiran</a>
+                </dd>
+            </div>
+        @endif
     </dl>
     <a href="{{ route('surat-masuk.index') }}" class="mt-6 inline-block rounded-md bg-slate-200 px-4 py-2 text-slate-700 hover:bg-slate-300">Kembali ke daftar</a>
 </div>
