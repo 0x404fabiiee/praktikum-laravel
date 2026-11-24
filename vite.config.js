@@ -16,3 +16,5 @@ export default defineConfig({
         },
     },
 });
+
+// ni yang menghubungkan Vite dengan Laravel dan mengaktifkan Tailwind.”
